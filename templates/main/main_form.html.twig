@@ -1,0 +1,13 @@
+<form method="POST" action="{{ path('Form_controller') }}">
+    <div class="form-group">
+        <label for="multiselectField">Select Options:</label>
+        <select multiple class="form-control" id="multiselectField" name="multiselectField[]">
+            <option value="option1">Option 1</option>
+            <option value="option2">Option 2</option>
+            <option value="option3">Option 3</option>
+            <!-- Add more options as needed -->
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
