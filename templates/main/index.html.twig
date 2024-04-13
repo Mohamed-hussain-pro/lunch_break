@@ -1,6 +1,10 @@
+{% include('base.html.twig') %}
+
 {% block body %}
     {% include 'main/header.html.twig' with {'number': temp} %}
+
     <div class="container-fluid">
-    
+        {% include 'main/main_form.html.twig'%}
+
     </div>
 {% endblock %}

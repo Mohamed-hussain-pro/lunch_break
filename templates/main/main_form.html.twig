@@ -1,4 +1,6 @@
-<form method="POST" action="{{ path('Form_controller') }}">
+
+<form method="POST" action="{{ path('get_resturant') }}"> 
+  <div class="mb-3">
     <div class="form-group">
         <label for="multiselectField">Select Options:</label>
         <select multiple class="form-control" id="multiselectField" name="multiselectField[]">
@@ -8,6 +10,7 @@
             <!-- Add more options as needed -->
         </select>
     </div>
-
-    <button type="submit" class="btn btn-primary">Submit</button>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+  <button class="btn btn-primary"><a href="{{ path('selected_choices_list') }}" class="btn btn-primary">show all selected choices</a></button>
 </form>

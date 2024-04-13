@@ -19,14 +19,14 @@ class Category
     private ?string $name = null;
 
     /**
-     * @var Collection<int, CategoryToResurant>
+     * @var Collection<int, CategoryToResturant>
      */
-    #[ORM\OneToMany(targetEntity: CategoryToResurant::class, mappedBy: 'category_id')]
-    private Collection $categoryToResurants;
+    #[ORM\OneToMany(targetEntity: CategoryToResturant::class, mappedBy: 'category_id')]
+    private Collection $categoryToResturants;
 
     public function __construct()
     {
-        $this->categoryToResurants = new ArrayCollection();
+        $this->CategoryToResturants = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -47,29 +47,29 @@ class Category
     }
 
     /**
-     * @return Collection<int, CategoryToResurant>
+     * @return Collection<int, CategoryToResturant>
      */
-    public function getCategoryToResurants(): Collection
+    public function getCategoryToResturants(): Collection
     {
-        return $this->categoryToResurants;
+        return $this->CategoryToResturants;
     }
 
-    public function addCategoryToResurant(CategoryToResurant $categoryToResurant): static
+    public function addCategoryToResturant(CategoryToResturant $CategoryToResturant): static
     {
-        if (!$this->categoryToResurants->contains($categoryToResurant)) {
-            $this->categoryToResurants->add($categoryToResurant);
-            $categoryToResurant->setCategoryId($this);
+        if (!$this->CategoryToResturants->contains($CategoryToResturant)) {
+            $this->CategoryToResturants->add($CategoryToResturant);
+            $CategoryToResturant->setCategoryId($this);
         }
 
         return $this;
     }
 
-    public function removeCategoryToResurant(CategoryToResurant $categoryToResurant): static
+    public function removeCategoryToResturant(CategoryToResturant $CategoryToResturant): static
     {
-        if ($this->categoryToResurants->removeElement($categoryToResurant)) {
+        if ($this->CategoryToResturants->removeElement($CategoryToResturant)) {
             // set the owning side to null (unless already changed)
-            if ($categoryToResurant->getCategoryId() === $this) {
-                $categoryToResurant->setCategoryId(null);
+            if ($CategoryToResturant->getCategoryId() === $this) {
+                $CategoryToResturant->setCategoryId(null);
             }
         }
 

@@ -25,14 +25,14 @@ class Resturant
     private ?string $telefonnummer = null;
 
     /**
-     * @var Collection<int, CategoryToResurant>
+     * @var Collection<int, CategoryToResturant>
      */
-    #[ORM\OneToMany(targetEntity: CategoryToResurant::class, mappedBy: 'resturant_id')]
-    private Collection $categoryToResurants;
+    #[ORM\OneToMany(targetEntity: CategoryToResturant::class, mappedBy: 'resturant_id')]
+    private Collection $CategoryToResturants;
 
     public function __construct()
     {
-        $this->categoryToResurants = new ArrayCollection();
+        $this->CategoryToResturants = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -77,26 +77,26 @@ class Resturant
     }
 
     /**
-     * @return Collection<int, CategoryToResurant>
+     * @return Collection<int, CategoryToResturant>
      */
     public function getCategoryId(): Collection
     {
-        return $this->categoryToResurants;
+        return $this->CategoryToResturants;
     }
 
-    public function addCategoryId(CategoryToResurant $categoryId): static
+    public function addCategoryId(CategoryToResturant $categoryId): static
     {
-        if (!$this->categoryToResurants->contains($categoryId)) {
-            $this->categoryToResurants->add($categoryId);
+        if (!$this->CategoryToResturants->contains($categoryId)) {
+            $this->CategoryToResturants->add($categoryId);
             $categoryId->setResturantId($this);
         }
 
         return $this;
     }
 
-    public function removeCategoryId(CategoryToResurant $categoryId): static
+    public function removeCategoryId(CategoryToResturant $categoryId): static
     {
-        if ($this->categoryToResurants->removeElement($categoryId)) {
+        if ($this->CategoryToResturants->removeElement($categoryId)) {
             // set the owning side to null (unless already changed)
             if ($categoryId->getResturantId() === $this) {
                 $categoryId->setResturantId(null);

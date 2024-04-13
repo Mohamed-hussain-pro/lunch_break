@@ -2,27 +2,27 @@
 
 namespace App\Repository;
 
-use App\Entity\CategoryToResurant;
+use App\Entity\CategoryToResturant;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<CategoryToResurant>
+ * @extends ServiceEntityRepository<CategoryToResturant>
  *
- * @method CategoryToResurant|null find($id, $lockMode = null, $lockVersion = null)
- * @method CategoryToResurant|null findOneBy(array $criteria, array $orderBy = null)
- * @method CategoryToResurant[]    findAll()
- * @method CategoryToResurant[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method CategoryToResturant|null find($id, $lockMode = null, $lockVersion = null)
+ * @method CategoryToResturant|null findOneBy(array $criteria, array $orderBy = null)
+ * @method CategoryToResturant[]    findAll()
+ * @method CategoryToResturant[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CategoryToResurantRepository extends ServiceEntityRepository
+class CategoryToResturantRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, CategoryToResurant::class);
+        parent::__construct($registry, CategoryToResturant::class);
     }
 
     //    /**
-    //     * @return CategoryToResurant[] Returns an array of CategoryToResurant objects
+    //     * @return CategoryToResturant[] Returns an array of CategoryToResturant objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -36,7 +36,7 @@ class CategoryToResurantRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?CategoryToResurant
+    //    public function findOneBySomeField($value): ?CategoryToResturant
     //    {
     //        return $this->createQueryBuilder('c')
     //            ->andWhere('c.exampleField = :val')
