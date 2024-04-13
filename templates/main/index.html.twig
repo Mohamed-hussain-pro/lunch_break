@@ -4,7 +4,6 @@
     {% include 'main/header.html.twig' with {'number': temp} %}
 
     <div class="container-fluid">
-        {% include 'main/main_form.html.twig'%}
-
+        {% include 'main/categories_list_form.html.twig' with {'categories': categories} %}
     </div>
 {% endblock %}

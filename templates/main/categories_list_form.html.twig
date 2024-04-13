@@ -1,0 +1,31 @@
+<form id="categoryForm" method="POST" action="{{ path('get_resturant') }}"> 
+  <div class="mb-3">
+    <div class="form-group">
+      <ul id="categoriesList" class="list-group">
+        {% for category in categories %}
+          <li id="categoriesListItem" class="list-group-item" data-id="{{ category.id }}">{{ category.name }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <input type="hidden" id="selectedCategoryIds" name="selectedCategoryIds">
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const listItems = document.querySelectorAll('#categoriesList li');
+    const selectedCategoryIdsInput = document.getElementById('selectedCategoryIds');
+
+    listItems.forEach(listItem => {
+      listItem.addEventListener('click', function() {
+        // Toggle the 'active' class for the clicked list item
+        listItem.classList.toggle('active');
+        // Update the selected restaurant IDs in the hidden input field
+        const selectedCategoryIds = Array.from(document.querySelectorAll('#categoriesList li.active')).map(item => item.dataset.id);
+        selectedCategoryIdsInput.value = selectedCategoryIds.join(',');
+
+      });
+    });
+  });
+</script>

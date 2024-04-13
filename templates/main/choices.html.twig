@@ -1,36 +1,55 @@
 {% include('base.html.twig') %}
+
 {% block body %}
 
 {% include 'main/header.html.twig' with {'number': temp} %}
- <div class="container-fluid">
-    <form method="POST" action="{{ path('save_choices') }}"> 
-        <div class="m-3">
-            <div class="form-group">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                    <label class="form-check-label" for="flexCheckChecked">
-                        Checked checkbox
-                    </label>
+    <div class="container-fluid">
+        <form id="resturantsForm" method="POST" action="{{ path('save_choices') }}"> 
+            <div class="mb-3">
+                <div class="form-group">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Address</th>
+                                <th>telefone number</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for resturant in resturants %}
+                                <tr id = "single-resturant" data-id="{{ resturant.id }}">
+                                    <td>{{ resturant.name }}</td>
+                                    <td>{{ resturant.address }}</td>
+                                    <td>{{ resturant.telefonnummer }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <div class="form-group">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                    <label class="form-check-label" for="flexCheckChecked">
-                        Checked checkbox
-                    </label>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-                    <label class="form-check-label" for="flexCheckChecked">
-                        Checked checkbox
-                    </label>
-                </div>
-            </div>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
- </div>
+            <input type="hidden" id="selectedResturantIds" name="selectedResturantIds">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+    </div>
 {% endblock %}
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const tableRows = document.querySelectorAll('#resturantsForm table tbody tr');
+    const selectedResturantIdsInput = document.getElementById('selectedResturantIds');
+
+        tableRows.forEach(row => {
+        row.addEventListener('click', function() {
+            // Toggle the 'active' class for the clicked table row
+            row.classList.toggle('active');
+            row.classList.toggle('bg-primary');
+
+            // Update the selected category IDs in the hidden input field
+            const selectedResturantIds = Array.from(document.querySelectorAll('#resturantsForm table tbody tr.bg-primary')).map(row => row.dataset.id);
+            selectedResturantIdsInput.value = selectedResturantIds.join(',');
+            console.log(selectedResturantIds);
+        });
+    });
+  });
+</script>

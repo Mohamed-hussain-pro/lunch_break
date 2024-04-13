@@ -13,37 +13,37 @@ class CategoryToResturant
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'category_id')]
+    #[ORM\ManyToOne(inversedBy: 'CategoryToResturants')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?resturant $resturant = null;
+    private ?Resturant $resturant = null;
 
     #[ORM\ManyToOne(inversedBy: 'CategoryToResturants')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?category $category = null;
+    private ?Category $category = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getResturant(): ?resturant
+    public function getResturant(): ?Resturant
     {
         return $this->resturant;
     }
 
-    public function setResturant(?resturant $resturant): static
+    public function setResturant(?Resturant $resturant): self
     {
         $this->resturant = $resturant;
 
         return $this;
     }
 
-    public function getCategory(): ?category
+    public function getCategory(): ?Category
     {
         return $this->category;
     }
 
-    public function setCategory(?category $category): static
+    public function setCategory(?Category $category): self
     {
         $this->category = $category;
 

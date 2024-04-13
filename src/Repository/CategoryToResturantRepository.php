@@ -21,6 +21,35 @@ class CategoryToResturantRepository extends ServiceEntityRepository
         parent::__construct($registry, CategoryToResturant::class);
     }
 
+        /**
+         * @return CategoryToResturant[] Returns an array of CategoryToResturant objects
+         */
+        public function findByCategoryIds(array $ids): array
+        {
+            return $this->createQueryBuilder('c')
+                ->andWhere('c.category_id IN (:ids)')
+                ->setParameter('ids', $ids)
+                ->orderBy('c.id', 'ASC')
+                ->setMaxResults(6)
+                ->getQuery()
+                ->getResult();
+        }
+
+        /**
+         * @return int[]
+         */
+        public function findResturantIdsByCategoryIds(array $ids): array
+        {
+            return $this->createQueryBuilder('c')
+            ->select('IDENTITY(c.resturant) as resturant_id')
+            ->andWhere('c.category IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->orderBy('c.id', 'ASC')
+            ->setMaxResults(6)
+            ->getQuery()
+            ->getResult();
+        }
+
     //    /**
     //     * @return CategoryToResturant[] Returns an array of CategoryToResturant objects
     //     */

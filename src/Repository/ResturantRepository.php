@@ -21,6 +21,20 @@ class ResturantRepository extends ServiceEntityRepository
         parent::__construct($registry, Resturant::class);
     }
 
+         /**
+         * @return Resturant[]
+         */
+        public function findByResturantIds(array $ids): array
+        {
+            return $this->createQueryBuilder('r')
+                ->andWhere('r.id IN (:ids)')
+                ->setParameter('ids', $ids)
+                ->orderBy('r.id', 'ASC')
+                ->setMaxResults(6)
+                ->getQuery()
+                ->getResult();
+        }
+
     //    /**
     //     * @return Resturant[] Returns an array of Resturant objects
     //     */
