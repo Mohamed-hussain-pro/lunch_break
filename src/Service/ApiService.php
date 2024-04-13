@@ -16,7 +16,7 @@ class ApiService
 
     public function fetchData(): array
     {
-        $response = $this->client->request('GET', 'https://api.openweathermap.org/data/2.5/weather?q=wiesbaden,de&appid=8ca1bf554fe26dff41d635d4e2f866ed');
+        $response = $this->client->request('GET', 'https://api.openweathermap.org/data/2.5/weather?q=wiesbaden,de&appid=!APIKEY!');
 
         $data = json_decode($response->getBody(), true);
 
