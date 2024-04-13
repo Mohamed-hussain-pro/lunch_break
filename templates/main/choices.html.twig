@@ -3,7 +3,10 @@
 {% block body %}
 
 {% include 'main/header.html.twig' with {'number': temp} %}
+
     <div class="container-fluid">
+    <h1 class="m-2">Matched Resturants</h1>
+
         <form id="resturantsForm" method="POST" action="{{ path('save_choices') }}"> 
             <div class="mb-3">
                 <div class="form-group">
