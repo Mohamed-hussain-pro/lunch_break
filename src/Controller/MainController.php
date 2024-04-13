@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Service\ApiService;
 use App\Repository\ResturantRepository;
 use App\Repository\CategoryRepository;
+use App\Repository\SelectedResturantRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,15 +20,20 @@ class MainController extends AbstractController
 
     private $categoryRepository;
 
+    private $selectedResturantRepository;
+
 
     public function __construct(
         ApiService $apiService, 
         ResturantRepository $resturantRepository, 
-        CategoryRepository $categoryRepository)
+        CategoryRepository $categoryRepository,
+        SelectedResturantRepository $selectedResturantRepository
+        )
     {
         $this->apiService = $apiService;
         $this->resturantRepository = $resturantRepository;
         $this->categoryRepository = $categoryRepository;
+        $this->selectedResturantRepository = $selectedResturantRepository;
     }
 
     #[Route('/', name: 'app_main')]
@@ -51,6 +57,10 @@ class MainController extends AbstractController
     {
         $data = $this->apiService->fetchData();
 
-        return $this->render('main/selected_choices_list.html.twig', ['temp' => $data['main']['temp']]);
+        $selectedChoices = $this->selectedResturantRepository->findAll();
+        return $this->render('main/selected_choices_list.html.twig', 
+        ['temp' => $data['main']['temp'],
+        'selectedChoices' => $selectedChoices]
+    );
     }
 }
