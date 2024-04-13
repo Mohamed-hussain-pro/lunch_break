@@ -50,10 +50,6 @@ final class Version20240413111840 extends AbstractMigration
       (6, 1, 3),
       (7, 2, 4),
       (8, 3, 5)");
-
-      $this->addSql("INSERT INTO selected_resturant (id, timestamp, resturant) VALUES 
-      (1, '2022-04-01 10:00:00', 'Restaurant Ente'),
-      (2, '2022-04-02 12:00:00', 'Restaurant Mauritius')");
     }
 
     public function down(Schema $schema): void
