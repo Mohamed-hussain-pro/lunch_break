@@ -1,4 +1,11 @@
 {% include('base.html.twig') %}
+<style>
+    /* Style for removing underline from links */
+    a {
+        text-decoration: none; /* Remove underline */
+        color: inherit; /* Inherit text color */
+    }
+</style>
 
 {% block body %}
 
@@ -23,7 +30,7 @@
                                 <tr id = "single-resturant" data-id="{{ resturant.name }}">
                                     <td>{{ resturant.name }}</td>
                                     <td>{{ resturant.address }}</td>
-                                    <td>{{ resturant.telefonnummer }}</td>
+                                    <td><a  href="tel:+1234567890">{{ resturant.telefonnummer }}</a></td>
                                 </tr>
                             {% endfor %}
                         </tbody>
