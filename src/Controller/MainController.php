@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Psr\Log\LoggerInterface;
 use App\Service\ApiService;
 use App\Repository\ResturantRepository;
 use App\Repository\CategoryRepository;
@@ -22,45 +23,76 @@ class MainController extends AbstractController
 
     private $selectedResturantRepository;
 
+    private $logger;
 
     public function __construct(
         ApiService $apiService, 
         ResturantRepository $resturantRepository, 
         CategoryRepository $categoryRepository,
-        SelectedResturantRepository $selectedResturantRepository
+        SelectedResturantRepository $selectedResturantRepository,
+        LoggerInterface $logger
         )
     {
         $this->apiService = $apiService;
         $this->resturantRepository = $resturantRepository;
         $this->categoryRepository = $categoryRepository;
         $this->selectedResturantRepository = $selectedResturantRepository;
+        $this->logger = $logger;
     }
 
     #[Route('/', name: 'app_main')]
     public function index(ParameterBagInterface $parameterBag): Response
-    {
+        {
+            try {
 
-        $data = $this->apiService->fetchData();
-        //$resturants = $this->resturantRepository->findAll();
-        $categories = $this->categoryRepository->findAll();
+            $data = $this->apiService->fetchData();
 
-        return $this->render('main/index.html.twig', [
-            'controller_name' => 'MainController',
-            'temp' => $data['main']['temp'],
-            'categories' => $categories
-            //"resturants" => $resturants
-        ]);
+            $categories = $this->categoryRepository->findAll();
+
+            if (empty($categories)) {
+                $this->logger->error('categories can not be empty!');
+
+                return $this->redirectToRoute('app_error');
+            }
+
+            return $this->render('main/index.html.twig', [
+                'controller_name' => 'MainController',
+                'temp' => $data['main']['temp'],
+                'categories' => $categories
+                //"resturants" => $resturants
+            ]);
+
+        } catch (\Exception $e) {
+            $this->logger->error('An error occurred: ' . $e->getMessage());
+
+            return $this->redirectToRoute('app_error');
+        }
     }
 
     #[Route('/selected-choices-list', name: 'selected_choices_list')]
     public function showSelectedChoices(): Response
     {
-        $data = $this->apiService->fetchData();
+        try {
 
-        $selectedChoices = $this->selectedResturantRepository->findAll();
-        return $this->render('main/selected_choices_list.html.twig', 
-        ['temp' => $data['main']['temp'],
-        'selectedChoices' => $selectedChoices]
-    );
+            $data = $this->apiService->fetchData();
+
+            $selectedChoices = $this->selectedResturantRepository->findAll();
+            
+            if (empty($selectedChoices)) {
+                $this->logger->error('selectedChoices can not be empty!');
+
+                return $this->redirectToRoute('app_error');
+            }
+
+            return $this->render('main/selected_choices_list.html.twig', 
+            ['temp' => $data['main']['temp'],
+            'selectedChoices' => $selectedChoices]
+            );
+            
+        } catch (\Exception $e) {
+            $this->logger->error('An error occurred: ' . $e->getMessage());
+
+            return $this->redirectToRoute('app_error');
+        }
     }
 }

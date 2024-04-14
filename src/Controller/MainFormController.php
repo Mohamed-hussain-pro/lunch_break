@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Psr\Log\LoggerInterface;
 use App\Service\ApiService;
 use App\Entity\SelectedResturant;
 use App\Repository\ResturantRepository;
@@ -23,17 +24,21 @@ class MainFormController extends AbstractController
 
     private $entityManager;
 
+    private $logger;
+
     public function __construct(
         ApiService $apiService,
         ResturantRepository $resturantRepository,
         CategoryToResturantRepository $categoryToResturantRepository,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        LoggerInterface $logger
         )
     {
         $this->apiService = $apiService;
         $this->resturantRepository = $resturantRepository;
         $this->categoryToResturantRepository = $categoryToResturantRepository;
         $this->entityManager = $entityManager;
+        $this->logger = $logger;
     }
 
     #[Route('/save_choices', name: 'save_choices')]
@@ -67,14 +72,10 @@ class MainFormController extends AbstractController
         if ($request->isMethod('POST')) {
             $selectedCategoryIds = $request->request->get('selectedCategoryIds');
             $selectedCategoryIdsArray = explode(',', $selectedCategoryIds);
-            //dd($selectedCategoryIdsArray);
 
             $resturantIds = $this->categoryToResturantRepository->findResturantIdsByCategoryIds($selectedCategoryIdsArray);
-            //dd($resturantIds);
 
             $resturants = $this->resturantRepository->findByResturantIds($resturantIds);
-            //dd($resturants);
-
 
             return $this->render('main/choices.html.twig', [
                 'controller_name' => 'MainFormController',
@@ -85,7 +86,4 @@ class MainFormController extends AbstractController
 
         return $this->render('main/choices.html.twig');
     }
-
-
-
 }
