@@ -46,6 +46,11 @@ class MainController extends AbstractController
             try {
 
             $data = $this->apiService->fetchData();
+            if (empty($data)) {
+                $this->logger->error('Temperature can not be empty!');
+
+                return $this->redirectToRoute('app_error');
+            }
 
             $categories = $this->categoryRepository->findAll();
 
@@ -61,7 +66,6 @@ class MainController extends AbstractController
                 'categories' => $categories
                 //"resturants" => $resturants
             ]);
-
         } catch (\Exception $e) {
             $this->logger->error('An error occurred: ' . $e->getMessage());
 
@@ -75,7 +79,11 @@ class MainController extends AbstractController
         try {
 
             $data = $this->apiService->fetchData();
+            if (empty($data)) {
+                $this->logger->error('Temperature can not be empty!');
 
+                return $this->redirectToRoute('app_error');
+            }
             $selectedChoices = $this->selectedResturantRepository->findAll();
             
             if (empty($selectedChoices)) {
@@ -88,7 +96,7 @@ class MainController extends AbstractController
             ['temp' => $data['main']['temp'],
             'selectedChoices' => $selectedChoices]
             );
-            
+
         } catch (\Exception $e) {
             $this->logger->error('An error occurred: ' . $e->getMessage());
 

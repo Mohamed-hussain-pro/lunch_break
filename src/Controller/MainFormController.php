@@ -44,46 +44,86 @@ class MainFormController extends AbstractController
     #[Route('/save_choices', name: 'save_choices')]
     public function saveChoices(Request $request): Response
     {
-        if ($request->isMethod('POST')) {
-            $selectedResturantIds = $request->request->get('selectedResturantIds');
-            //$selectedResturantIdsArray = explode(',', $selectedResturantIds);
+        try {
 
-            $selectedResturant = new SelectedResturant();
+            if ($request->isMethod('POST')) {
+                $selectedResturantNames = $request->request->get('selectedResturantIds');
+                
+                if (empty($selectedResturantNames)) {
+                    $this->logger->error('selectedResturantNames can not be empty!');
+    
+                    return $this->redirectToRoute('app_error');
+                }
 
-            $selectedResturant->setTimestamp(new \DateTime());
+                $selectedResturant = new SelectedResturant();
 
-            $selectedResturant->setResturant($selectedResturantIds);
+                $selectedResturant->setTimestamp(new \DateTime());
 
-            // Persist the entity
-            $this->entityManager->persist($selectedResturant);
+                $selectedResturant->setResturant($selectedResturantNames);
 
-            // Flush changes to the database
-            $this->entityManager->flush();
+                // Persist the entity
+                $this->entityManager->persist($selectedResturant);
+
+                // Flush changes to the database
+                $this->entityManager->flush();
+            }
+
+            return $this->redirectToRoute('app_main');
+        } catch (\Exception $e) {
+            $this->logger->error('An error occurred: ' . $e->getMessage());
+
+            return $this->redirectToRoute('app_error');
         }
-
-        return $this->redirectToRoute('app_main');
     }
     
     #[Route('/get-resturant', name: 'get_resturant')]
     public function getResturant(Request $request): Response
     {
-        $data = $this->apiService->fetchData();
+        try {
 
-        if ($request->isMethod('POST')) {
-            $selectedCategoryIds = $request->request->get('selectedCategoryIds');
-            $selectedCategoryIdsArray = explode(',', $selectedCategoryIds);
+            $data = $this->apiService->fetchData();
+            
+            if (empty($data)) {
+                $this->logger->error('Temperature can not be empty!');
 
-            $resturantIds = $this->categoryToResturantRepository->findResturantIdsByCategoryIds($selectedCategoryIdsArray);
+                return $this->redirectToRoute('app_error');
+            }
 
-            $resturants = $this->resturantRepository->findByResturantIds($resturantIds);
+            if ($request->isMethod('POST')) {
+                $selectedCategoryIds = $request->request->get('selectedCategoryIds');
+                
+                if (empty($selectedCategoryIds)) {
+                    $this->logger->error('selectedCategoryIds can not be empty!');
+    
+                    return $this->redirectToRoute('app_error');
+                }
+                $selectedCategoryIdsArray = explode(',', $selectedCategoryIds);
 
-            return $this->render('main/choices.html.twig', [
-                'controller_name' => 'MainFormController',
-                'temp' => $data['main']['temp'],
-                'resturants' => $resturants
-            ]);
+                $resturantIds = $this->categoryToResturantRepository->findResturantIdsByCategoryIds($selectedCategoryIdsArray);
+                if (empty($resturantIds)) {
+                    $this->logger->error('resturantIds can not be empty!');
+    
+                    return $this->redirectToRoute('app_error');
+                }
+
+                $resturants = $this->resturantRepository->findByResturantIds($resturantIds);
+                if (empty($resturants)) {
+                    $this->logger->error('resturants can not be empty!');
+    
+                    return $this->redirectToRoute('app_error');
+                }
+                return $this->render('main/choices.html.twig', [
+                    'controller_name' => 'MainFormController',
+                    'temp' => $data['main']['temp'],
+                    'resturants' => $resturants
+                ]);
+            }
+
+            return $this->render('main/choices.html.twig');
+        } catch (\Exception $e) {
+            $this->logger->error('An error occurred: ' . $e->getMessage());
+
+            return $this->redirectToRoute('app_error');
         }
-
-        return $this->render('main/choices.html.twig');
     }
 }
