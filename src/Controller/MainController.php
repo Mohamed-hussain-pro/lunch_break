@@ -9,9 +9,10 @@ use App\Repository\CategoryRepository;
 use App\Repository\SelectedResturantRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class MainController extends AbstractController
 {
@@ -25,12 +26,15 @@ class MainController extends AbstractController
 
     private $logger;
 
+    private $serializer;
+
     public function __construct(
         ApiService $apiService, 
         ResturantRepository $resturantRepository, 
         CategoryRepository $categoryRepository,
         SelectedResturantRepository $selectedResturantRepository,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        SerializerInterface $serializer
         )
     {
         $this->apiService = $apiService;
@@ -38,6 +42,7 @@ class MainController extends AbstractController
         $this->categoryRepository = $categoryRepository;
         $this->selectedResturantRepository = $selectedResturantRepository;
         $this->logger = $logger;
+        $this->serializer = $serializer;
     }
 
     #[Route('/', name: 'app_main')]
@@ -97,6 +102,35 @@ class MainController extends AbstractController
             'selectedChoices' => $selectedChoices]
             );
 
+        } catch (\Exception $e) {
+            $this->logger->error('An error occurred: ' . $e->getMessage());
+
+            return $this->redirectToRoute('app_error');
+        }
+    }
+
+    #[Route('/selected-choices-list-json', name: 'selected_choices_list-json')]
+    public function showSelectedChoicesJson(): Response
+    {
+        try {
+
+            $data = $this->apiService->fetchData();
+            if (empty($data)) {
+                $this->logger->error('Temperature can not be empty!');
+
+                return $this->redirectToRoute('app_error');
+            }
+            $selectedChoices = $this->selectedResturantRepository->findAll();
+            
+            if (empty($selectedChoices)) {
+                $this->logger->error('selectedChoices can not be empty!');
+
+                return $this->redirectToRoute('app_error');
+            }
+
+            $selectedChoicesJson = $this->serializer->serialize($selectedChoices, 'json');
+
+            return new JsonResponse($selectedChoicesJson, 200, [], true);
         } catch (\Exception $e) {
             $this->logger->error('An error occurred: ' . $e->getMessage());
 
